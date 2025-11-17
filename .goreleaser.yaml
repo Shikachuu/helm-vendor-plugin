@@ -1,0 +1,100 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
+before:
+  hooks:
+    - mise lint
+    - mise gogen
+    - mise test
+
+builds:
+  - id: vendor-plugin
+    main: ./main.go
+    binary: bin/vendor-plugin
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    # Ignore Windows ARM64 as it's not commonly used
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+      - -X github.com/Shikachuu/helm-vendor-plugin/cmd.version={{.Version}}
+      - -X github.com/Shikachuu/helm-vendor-plugin/cmd.commit={{.Commit}}
+      - -X github.com/Shikachuu/helm-vendor-plugin/cmd.date={{.Date}}
+
+archives:
+  - id: helm-vendor-plugin
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    formats:
+      - tar.gz
+    files:
+      - plugin.yaml
+      - LICENSE*
+      - schema.json
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "^ci:"
+      - "merge conflict"
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+  groups:
+    - title: "New Features"
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: "Bug Fixes"
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: "Performance Improvements"
+      regexp: '^.*?perf(\([[:word:]]+\))??!?:.+$'
+      order: 2
+    - title: "Refactors"
+      regexp: '^.*?refactor(\([[:word:]]+\))??!?:.+$'
+      order: 3
+    - title: "Other Changes"
+      order: 999
+
+release:
+  github:
+    owner: Shikachuu
+    name: helm-vendor-plugin
+  draft: false
+  prerelease: auto
+  mode: append
+  header: |
+    ## Helm Vendor Plugin {{ .Tag }} ({{ .Date }})
+
+    Install or update this plugin using:
+    ```bash
+    helm plugin install https://github.com/Shikachuu/helm-vendor-plugin --version {{ .Tag }}
+    # or to update
+    helm plugin update vendor
+    ```
+  footer: |
+    **Full Changelog**: https://github.com/Shikachuu/helm-vendor-plugin/compare/{{ .PreviousTag }}...{{ .Tag }}

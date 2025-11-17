@@ -15,15 +15,22 @@ var (
 // NewRootCommand creates and returns the root cobra command for the helm vendor plugin.
 // It configures the vendor command with subcommands and validates the configuration file path.
 func NewRootCommand() *cobra.Command {
+	versionCmd := NewVersionCommand()
+
 	rootCmd := &cobra.Command{
 		Use:   "vendor [command]",
 		Short: "Vendor downloads helm charts from remote repositories.",
 		Long:  "Vendor downloads helm charts from OCI and Helm repositories for vendoring, either in unpacked or tgz form.",
-		PersistentPreRunE: func(_ *cobra.Command, _ []string) error {
+		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
 			if _, err := os.Stat(configPath); os.IsNotExist(err) {
 				return fmt.Errorf("config file not found: %s", configPath)
 			} else if err != nil {
 				return fmt.Errorf("error accessing config file: %w", err)
+			}
+
+			isVersion, _ := cmd.Flags().GetBool("version")
+			if isVersion {
+				return versionCmd.Execute()
 			}
 
 			return nil
@@ -31,9 +38,11 @@ func NewRootCommand() *cobra.Command {
 	}
 
 	rootCmd.PersistentFlags().StringVarP(&configPath, "file", "f", ".vendor-charts.yaml", "The file contains the vendor-charts config.")
+	rootCmd.Flags().BoolP("version", "v", false, "Prints the current version")
 
 	rootCmd.AddCommand(
 		NewVerifyCommand(),
+		versionCmd,
 	)
 
 	return rootCmd
