@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Helm Vendor Charts Configuration",
+  "description": "Configuration file for vendoring Helm charts",
+  "type": "object",
+  "required": ["charts"],
+  "properties": {
+    "charts": {
+      "type": "array",
+      "description": "List of Helm charts to vendor",
+      "items": {
+        "type": "object",
+        "required": ["name", "repository", "version", "destination"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the Helm chart",
+            "minLength": 1
+          },
+          "repository": {
+            "type": "string",
+            "description": "Chart repository URL (http://, https://, or oci://)",
+            "pattern": "^(https?|oci)://.*",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "description": "Chart version to vendor",
+            "minLength": 1
+          },
+          "destination": {
+            "type": "string",
+            "description": "Local destination path for the vendored chart",
+            "minLength": 1
+          },
+          "insecure": {
+            "type": "boolean",
+            "description": "Allow insecure (non-TLS) connections to the repository",
+            "default": false
+          },
+          "verify": {
+            "type": "boolean",
+            "description": "Verify chart provenance",
+            "default": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}
+

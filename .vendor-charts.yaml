@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=./schema.json
+charts:
+  - name: descheduler
+    repository: https://kubernetes-sigs.github.io/descheduler
+    version: 0.34.0
+    destination: artifacts/descheduler
+    insecure: false
+
+  - name: prometheus
+    repository: oci://ghcr.io/prometheus-community/charts/prometheus
+    version: 27.45.0
+    destination: artifacts/prometheus
+
+  - name: cert-manager
+    repository: https://charts.jetstack.io
+    version: 1.19.1
+    verify: true
+    destination: artifacts/cert-manager
