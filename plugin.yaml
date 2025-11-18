@@ -1,6 +1,15 @@
+apiVersion: v1
+type: cli/v1
 name: vendor
 version: 0.1.0
-usage: Vendor helps you download and vendor helm charts.
-ignoreFlags: false
-platformCommand:
-  - command: $HELM_PLUGIN_DIR/bin/vendor-plugin
+runtime: subprocess
+sourceURL: https://github.com/Shikachuu/helm-vendor-plugin
+config:
+  usage: Vendor helps you download and vendor helm charts.
+  ignoreFlags: false
+runtimeConfig:
+  hooks:
+    install: $HELM_PLUGIN_DIR/hack/install-binary.sh
+    update: $HELM_PLUGIN_DIR/hack/install-binary.sh
+  platformCommand:
+    - command: $HELM_PLUGIN_DIR/bin/vendor-plugin

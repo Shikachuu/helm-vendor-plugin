@@ -3,6 +3,7 @@ go = "1.25.4"
 golangci-lint = "v2.5.0"
 helm = "4.0.0"
 goreleaser = "2.12.7"
+syft = "1.38.0"
 
 [settings]
 lockfile = true
