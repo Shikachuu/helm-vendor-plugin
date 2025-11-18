@@ -35,19 +35,21 @@ type JSONConfigParser struct {
 // Unmarshall parses the given vendor-charts configuration after validating it against the JSON schema.
 // It returns the parsed VendorChart slice or an error if validation or unmarshalling fails.
 func (j *JSONConfigParser) Unmarshall(cfg []byte) ([]VendorChart, error) {
-	var vcs []VendorChart
-
 	err := j.Validate(cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	err = j.schema.Unmarshal(vcs, cfg)
+	vcs := struct {
+		Charts []VendorChart `json:"charts"`
+	}{}
+
+	err = j.schema.Unmarshal(&vcs, cfg)
 	if err != nil {
-		return nil, fmt.Errorf("unable to unmarshall configuration: %w", err)
+		return nil, fmt.Errorf("unable to unmarshal configuration: %w", err)
 	}
 
-	return vcs, nil
+	return vcs.Charts, nil
 }
 
 // Validate checks the structural integrity of the configuration file against the JSON schema.
