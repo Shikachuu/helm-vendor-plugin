@@ -1,133 +1,81 @@
 #!/usr/bin/env sh
+set -e
+
 echo "Installing helm vendor plugin"
 
+# Configuration
 PROJECT_NAME="helm-vendor-plugin"
 PROJECT_ORG="${PROJECT_ORG:-Shikachuu}"
-PROJECT_GH="$PROJECT_ORG/$PROJECT_NAME"
 BINARY_NAME="vendor-plugin"
-export GREP_COLOR="never"
 
-HELM_MAJOR_VERSION=$("${HELM_BIN}" version --client --short | awk -F '.' '{print $1}')
+# Load Helm environment variables
+eval $(${HELM_BIN} env)
 
-: ${HELM_PLUGIN_DIR:="$("${HELM_BIN}" home --debug=false)/plugins/$PROJECT_NAME"}
-
-# Convert the HELM_PLUGIN_DIR to unix if cygpath is available
-if type cygpath >/dev/null 2>&1; then
-  HELM_PLUGIN_DIR=$(cygpath -u $HELM_PLUGIN_DIR)
+# Get plugin directory
+if [ -z "$HELM_PLUGIN_DIR" ]; then
+  HELM_PLUGIN_DIR="$HELM_PLUGINS/$PROJECT_NAME"
 fi
 
+# Skip if requested
 if [ "$SKIP_BIN_INSTALL" = "1" ]; then
   echo "Skipping binary install"
-  exit
+  exit 0
 fi
 
-# initArch discovers the architecture for this system
-initArch() {
-  ARCH=$(uname -m)
-  case $ARCH in
-    aarch64) ARCH="arm64" ;;
-    x86_64) ARCH="amd64" ;;
-    *)
-      echo "Unsupported architecture: $ARCH"
-      echo "Supported architectures: amd64, arm64"
-      exit 1
-      ;;
-  esac
-}
-
-# initOS discovers the operating system for this system
-initOS() {
-  OS=$(uname | tr '[:upper:]' '[:lower:]')
-
-  case "$OS" in
-    msys*) OS='windows' ;;
-    mingw*) OS='windows' ;;
-    darwin) OS='darwin' ;;
-  esac
-}
-
-# verifySupported checks that the os/arch combination is supported and tools are available
-verifySupported() {
-  # Check for windows-arm64 which is explicitly not supported
-  if [ "$OS" = "windows" ] && [ "$ARCH" = "arm64" ]; then
-    echo "No prebuild binary for ${OS}-${ARCH}."
+# Detect architecture
+ARCH=$(uname -m)
+case $ARCH in
+  arm64|aarch64) ARCH="arm64" ;;
+  x86_64) ARCH="amd64" ;;
+  *)
+    echo "Unsupported architecture: $ARCH"
     exit 1
-  fi
+    ;;
+esac
 
-  if ! type "curl" >/dev/null && ! type "wget" >/dev/null; then
-    echo "Either curl or wget is required"
-    exit 1
-  fi
-}
+# Detect OS
+OS=$(uname | tr '[:upper:]' '[:lower:]')
 
-# getDownloadURL checks the latest available version
-getDownloadURL() {
-  # Add .exe extension for Windows binaries
-  BINARY_EXT=""
-  if [ "$OS" = "windows" ]; then
-    BINARY_EXT=".exe"
-  fi
+# Check for curl or wget
+if ! type curl >/dev/null 2>&1 && ! type wget >/dev/null 2>&1; then
+  echo "Either curl or wget is required"
+  exit 1
+fi
 
-  version="$(cat $HELM_PLUGIN_DIR/plugin.yaml | grep "version" | cut -d '"' -f 2)"
-  if [ -n "$version" ]; then
-    DOWNLOAD_URL="https://github.com/$PROJECT_GH/releases/download/v$version/bin/$BINARY_NAME-$OS-$ARCH$BINARY_EXT"
+# Get version from plugin.yaml or use latest
+VERSION=$(grep "^version:" "$HELM_PLUGIN_DIR/plugin.yaml" | awk '{print $2}')
+if [ -n "$VERSION" ]; then
+  DOWNLOAD_URL="https://github.com/$PROJECT_ORG/$PROJECT_NAME/releases/download/v$VERSION/$BINARY_NAME-$OS-$ARCH"
+else
+  API_URL="https://api.github.com/repos/$PROJECT_ORG/$PROJECT_NAME/releases/latest"
+  if type curl >/dev/null 2>&1; then
+    DOWNLOAD_URL=$(curl -s "$API_URL" | grep "browser_download_url.*$BINARY_NAME-$OS-$ARCH\"" | cut -d '"' -f 4)
   else
-    url="https://api.github.com/repos/$PROJECT_GH/releases/latest"
-    if type "curl" >/dev/null; then
-      DOWNLOAD_URL=$(curl -s $url | grep "bin/$BINARY_NAME-$OS-$ARCH$BINARY_EXT\"" | awk '/\"browser_download_url\":/{gsub( /[,\"]/,"", $2); print $2}')
-    elif type "wget" >/dev/null; then
-      DOWNLOAD_URL=$(wget -q -O - $url | grep "bin/$BINARY_NAME-$OS-$ARCH$BINARY_EXT\"" | awk '/\"browser_download_url\":/{gsub( /[,\"]/,"", $2); print $2}')
-    fi
+    DOWNLOAD_URL=$(wget -q -O - "$API_URL" | grep "browser_download_url.*$BINARY_NAME-$OS-$ARCH\"" | cut -d '"' -f 4)
   fi
-}
+fi
 
-# downloadFile downloads the latest binary
-downloadFile() {
-  BINDIR="$HELM_PLUGIN_DIR/bin"
-  rm -rf "$BINDIR"
-  mkdir -p "$BINDIR"
+# Download binary
+BINDIR="$HELM_PLUGIN_DIR/bin"
+mkdir -p "$BINDIR"
+LOCAL_BINARY="$BINDIR/$BINARY_NAME"
 
-  # Local binary name (without .exe extension for consistency)
-  LOCAL_BINARY="$BINDIR/$BINARY_NAME"
-
-  echo "Downloading $DOWNLOAD_URL"
-  if type "curl" >/dev/null; then
-    HTTP_CODE=$(curl -sL --write-out "%{http_code}" "$DOWNLOAD_URL" --output "$LOCAL_BINARY")
-    if [ ${HTTP_CODE} -ne 200 ]; then
-      echo "Failed to download binary (HTTP ${HTTP_CODE})"
-      exit 1
-    fi
-  elif type "wget" >/dev/null; then
-    wget -q -O "$LOCAL_BINARY" "$DOWNLOAD_URL"
+echo "Downloading $DOWNLOAD_URL"
+if type curl >/dev/null 2>&1; then
+  HTTP_CODE=$(curl -sL --write-out "%{http_code}" "$DOWNLOAD_URL" --output "$LOCAL_BINARY")
+  if [ "$HTTP_CODE" != "200" ]; then
+    echo "Failed to download binary (HTTP $HTTP_CODE)"
+    exit 1
   fi
-
-  chmod +x "$LOCAL_BINARY"
-}
-
-# fail_trap is executed if an error occurs
-fail_trap() {
-  result=$?
-  if [ "$result" != "0" ]; then
-    echo "Failed to install $PROJECT_NAME"
-    printf "\tFor support, go to https://github.com/$PROJECT_GH.\n"
+else
+  if ! wget -q -O "$LOCAL_BINARY" "$DOWNLOAD_URL"; then
+    echo "Failed to download binary"
+    exit 1
   fi
-  exit $result
-}
+fi
 
-# testVersion tests the installed client
-testVersion() {
-  set +e
-  echo "$BINARY_NAME installed into $HELM_PLUGIN_DIR/bin/$BINARY_NAME"
-  "${HELM_PLUGIN_DIR}/bin/$BINARY_NAME" version
-  set -e
-}
+chmod +x "$LOCAL_BINARY"
 
-# Execution
-trap "fail_trap" EXIT
-set -e
-initArch
-initOS
-verifySupported
-getDownloadURL
-downloadFile
-testVersion
+# Test installation
+echo "$BINARY_NAME installed into $LOCAL_BINARY"
+"$LOCAL_BINARY" version || true
