@@ -6,13 +6,13 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/Shikachuu/helm-vendor-plugin/internal/helm"
 	"github.com/spf13/cobra"
-	"helm.sh/helm/v4/pkg/cli"
 )
 
 var (
 	configPath string
-	helmCLI    *cli.EnvSettings
+	helmCLI    *helm.Settings
 )
 
 // NewRootCommand creates and returns the root cobra command for the helm vendor plugin.
@@ -30,7 +30,7 @@ func NewRootCommand() *cobra.Command {
 				return fmt.Errorf("error accessing config file: %w", err)
 			}
 
-			helmCLI = cli.New()
+			helmCLI = helm.NewSettings()
 
 			ll := slog.LevelInfo
 			if helmCLI.Debug {
@@ -38,14 +38,15 @@ func NewRootCommand() *cobra.Command {
 			}
 
 			slog.SetDefault(slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-			Level: ll,
-			ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
-				if a.Key == slog.TimeKey {
-					return slog.Attr{}
-				}
-				return a
-			},
-		})))
+				Level: ll,
+				ReplaceAttr: func(_ []string, a slog.Attr) slog.Attr {
+					if a.Key == slog.TimeKey {
+						return slog.Attr{}
+					}
+
+					return a
+				},
+			})))
 
 			return nil
 		},

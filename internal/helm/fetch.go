@@ -8,7 +8,6 @@ import (
 
 	"github.com/Shikachuu/helm-vendor-plugin/internal/config"
 	"golang.org/x/sync/errgroup"
-	"helm.sh/helm/v4/pkg/cli"
 	"helm.sh/helm/v4/pkg/downloader"
 	"helm.sh/helm/v4/pkg/getter"
 	"helm.sh/helm/v4/pkg/registry"
@@ -22,8 +21,10 @@ import (
 // already assumes you are authenticated to the given registry or repo.
 //
 // Returns an error if any.
-func FetchCharts(s *cli.EnvSettings, vendorCharts []config.VendorChart) error {
-	getters := getter.All(s)
+func FetchCharts(s *Settings, vendorCharts []config.VendorChart) error {
+	// Use getter.Getters() instead of getter.All() to avoid cli.EnvSettings dependency
+	// This provides HTTP and OCI getters without pulling in Kubernetes client libraries
+	getters := getter.Getters()
 
 	rc, cErr := registry.NewClient(registry.ClientOptCredentialsFile(s.RegistryConfig))
 	if cErr != nil {
