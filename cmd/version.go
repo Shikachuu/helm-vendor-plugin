@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"log/slog"
 
 	"github.com/spf13/cobra"
 )
@@ -23,7 +23,7 @@ func NewVersionCommand() *cobra.Command {
 		Use:   "version",
 		Short: "Prints the version number",
 		RunE: func(_ *cobra.Command, _ []string) error {
-			fmt.Printf("Version: %s\tCommit: %s\tBuild date:%s\n", version, commit, date)
+			slog.Info("vendor plugin", "version", version, "commit", commit, "build_date", date)
 			return nil
 		},
 	}
