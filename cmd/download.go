@@ -40,14 +40,9 @@ func NewDownloadCommand() *cobra.Command {
 				return err
 			}
 
-			for i := range vcs {
-				vc := &vcs[i]
-				slog.Info("downloading chart", "repo", vc.Repository, "name", vc.Name, "destination", vc.Destination)
-
-				fErr := helm.FetchCharts(helmCLI, vc)
-				if fErr != nil {
-					return fErr
-				}
+			err = helm.FetchCharts(helmCLI, vcs)
+			if err != nil {
+				return err
 			}
 
 			slog.Info("downloaded all charts", "total", len(vcs))
