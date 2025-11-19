@@ -1,7 +1,7 @@
 apiVersion: v1
 type: cli/v1
 name: vendor
-version: 0.1.0
+version: 0.2.0
 runtime: subprocess
 sourceURL: https://github.com/Shikachuu/helm-vendor-plugin
 config:
