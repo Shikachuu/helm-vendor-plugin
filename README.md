@@ -10,6 +10,9 @@ helm plugin install https://github.com/Shikachuu/helm-vendor-plugin
 
 ## Usage
 
+> [!WARNING]
+> This plugin requires Helm 4.0.0 or later, with no backwards compatibility with Helm 3.
+
 ### Download Charts
 
 Download helm charts defined in your vendor-charts configuration file:
@@ -125,6 +128,7 @@ You can reference the schema in your editor for autocompletion:
 Requirements:
 
 - Go 1.25.3 or later
+- Helm 4.0.0 or later
 - [mise](https://mise.jdx.dev/) (optional, for managing tools)
 
 ## License
