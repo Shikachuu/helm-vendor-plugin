@@ -29,7 +29,7 @@ run = [
 
 [tasks.build]
 description = "Build a local binary"
-run = "go build -o bin/vendor-plugin"
+run = "go build -trimpath -ldflags='-s -w' -o bin/vendor-plugin"
 
 [tasks.release-snapshot]
 description = "Build a snapshot release with goreleaser"
