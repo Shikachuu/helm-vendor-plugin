@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 
 	"github.com/Shikachuu/helm-vendor-plugin/internal/config"
@@ -38,7 +39,7 @@ func NewVerifyCommand() *cobra.Command {
 				return err
 			}
 
-			fmt.Printf("config is valid: %s\n", configPath)
+			slog.Info("config is valid", "path", configPath)
 
 			return nil
 		},
