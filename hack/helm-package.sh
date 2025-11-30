@@ -4,8 +4,11 @@ set -e
 PLUGIN_VERSION=$(yq eval '.version' plugin.yaml)
 
 mkdir -p "tmp-$OS-$ARCH/bin"
+mkdir -p "tmp-$OS-$ARCH/hack"
 cp "$BIN_PATH" "tmp-$OS-$ARCH/bin/$BIN_NAME"
 cp plugin.yaml "tmp-$OS-$ARCH/"
+cp vendor.complete "tmp-$OS-$ARCH/"
+cp hack/install-binary.sh "tmp-$OS-$ARCH/hack/install-binary.sh"
 
 mkdir -p "dist-$OS-$ARCH"
 
