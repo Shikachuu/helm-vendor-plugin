@@ -5,6 +5,7 @@ helm = "4.0.0"
 goreleaser = "2.12.7"
 syft = "1.38.0"
 oras = "1.3.0"
+grype = "0.104.1"
 
 [settings]
 lockfile = true
@@ -25,7 +26,7 @@ run = "go test ./... -cover -race"
 description = "Lint golang and protobuf code"
 run = [
   "golangci-lint run --config .golangci-lint.yml --fix",
-  "diff schema.json internal/config/schema.json"
+  "diff schema.json internal/config/schema.json",
 ]
 
 [tasks.build]

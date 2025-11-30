@@ -49,6 +49,17 @@ jobs:
             exit 1
           fi
 
+      - name: Grype security check
+        id: grype
+        run: grype . -f medium --file grype.sarif
+        continue-on-error: true
+
+      - name: upload Grype scan SARIF report
+        if: steps.grype.outcome == 'failure'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: grype.sarif
+
   test:
     name: Test
     runs-on: ubuntu-latest
