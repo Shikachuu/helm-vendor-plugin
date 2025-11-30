@@ -64,7 +64,7 @@ func FetchCharts(s *Settings, vendorCharts []config.VendorChart) error {
 
 			slog.Info("chart downloaded", "url", url, "destination", p)
 
-			if v != nil {
+			if v != nil && v.SignedBy != nil {
 				slog.Info("chart validated", "url", url, "hash", v.FileHash)
 			}
 
@@ -72,7 +72,11 @@ func FetchCharts(s *Settings, vendorCharts []config.VendorChart) error {
 		})
 	}
 
-	return fmt.Errorf("unable to download charts: %w", eg.Wait())
+	if wErr := eg.Wait(); wErr != nil {
+		return fmt.Errorf("unable to download charts: %w", wErr)
+	}
+
+	return nil
 }
 
 // getChartURL returns the full URL for the chart.
