@@ -37,3 +37,6 @@ bin/
 
 # Downloaded artifacts
 artifacts/
+
+# Signing stuff
+*.gpg

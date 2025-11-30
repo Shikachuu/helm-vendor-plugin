@@ -1,6 +1,8 @@
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 version: 2
 
+project_name: vendor-plugin
+
 before:
   hooks:
     - mise lint
@@ -10,8 +12,20 @@ before:
 builds:
   - id: vendor-plugin
     main: ./main.go
-    binary: bin/vendor-plugin-{{ .Os }}-{{ .Arch }}
+    binary: bin/{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}
     no_unique_dist_dir: true
+    hooks:
+      post:
+        - rm -f dist/config.yaml
+        - cmd: bash hack/helm-package.sh
+          env:
+            - HELM_KEY_PASSPHRASE={{ .Env.HELM_KEY_PASSPHRASE }}
+            - SIGNING_KEY_EMAIL={{ .Env.SIGNING_KEY_EMAIL }}
+            - BIN_PATH={{ .Path }}
+            - BIN_NAME={{ .ProjectName }}
+            - VERSION={{ .Version }}
+            - OS={{ .Os }}
+            - ARCH={{ .Arch }}
     env:
       - CGO_ENABLED=0
     flags:
@@ -29,9 +43,9 @@ builds:
         goarch: arm64
     ldflags:
       - -s -w
-      - -X github.com/Shikachuu/helm-vendor-plugin/cmd.version={{.Version}}
-      - -X github.com/Shikachuu/helm-vendor-plugin/cmd.commit={{.Commit}}
-      - -X github.com/Shikachuu/helm-vendor-plugin/cmd.date={{.Date}}
+      - -X github.com/Shikachuu/helm-vendor-plugin/cmd.version={{ .Version }}
+      - -X github.com/Shikachuu/helm-vendor-plugin/cmd.commit={{ .Commit }}
+      - -X github.com/Shikachuu/helm-vendor-plugin/cmd.date={{ .Date }}
 
 archives:
   - formats: [binary]
@@ -54,12 +68,17 @@ release:
   draft: false
   prerelease: auto
   mode: append
+  extra_files:
+    - glob: dist/**.tgz
+    - glob: dist/**.tgz.prov
   header: |
     ## Helm Vendor Plugin {{ .Tag }} ({{ .Date }})
 
     Install or update this plugin using:
     ```bash
-    helm plugin install https://github.com/Shikachuu/helm-vendor-plugin --version {{ .Tag }}
+    helm plugin install https://github.com/Shikachuu/helm-vendor-plugin/releases/download/{{ .Tag }}/vendor-{{ .Version }}-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m).tgz
+    # or use an oci compatbile registry
+    helm plugin install oci://ghcr.io/shikachuu/helm-vendor-plugin/$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m):{{ .Version }}
     # or to update
     helm plugin update vendor
     ```
