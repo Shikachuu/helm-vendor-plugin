@@ -17,11 +17,40 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up mise
         uses: jdx/mise-action@v3
+
+      - name: GPG prepare
+        run: |
+          base64 -d <<< "${{ secrets.GPG_KEYRING_BASE64 }}" > secring.gpg
 
       - name: Run Go Releaser
         run: |
           goreleaser release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HELM_KEY_PASSPHRASE: ${{ secrets.HELM_KEY_PASSPHRASE }}
+          SIGNING_KEY_EMAIL: ${{ secrets.SIGNING_KEY_EMAIL }}
+
+      - name: Release OCI plugins with ORAS
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          for tgz_file in dist/*.tgz; do
+            if [ -f "$tgz_file" ]; then
+              filename=$(basename "$tgz_file" .tgz)
+              os_arch=$(echo "$filename" | rev | cut -d'-' -f1,2 | rev)
+              oras push "$NAME/$os_arch:$VERSION" \
+                --artifact-type application/vnd.helm.plugin.v1+json \
+                "$tgz_file" \
+                "$tgz_file.prov"
+            fi
+          done
+        env:
+          NAME: "ghcr.io/shikachuu/helm-vendor-plugin"
