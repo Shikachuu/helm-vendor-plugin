@@ -5,7 +5,7 @@ A Helm plugin for downloading and vendoring Helm charts from remote repositories
 ## Installation
 
 ```bash
-helm plugin install https://github.com/Shikachuu/helm-vendor-plugin
+helm plugin install https://github.com/Shikachuu/helm-vendor-plugin/releases/download/latest/vendor-0.2.2-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m).tgz
 ```
 
 ## Usage
@@ -127,9 +127,34 @@ You can reference the schema in your editor for autocompletion:
 
 Requirements:
 
-- Go 1.25.3 or later
+- Go 1.25.4 or later
 - Helm 4.0.0 or later
-- [mise](https://mise.jdx.dev/) (optional, for managing tools)
+- [mise](https://mise.jdx.dev/)
+
+### Development Tools
+
+This project uses [mise](https://mise.jdx.dev/) for managing development tools. Available tasks:
+
+```bash
+# Run all tests
+mise test
+
+# Lint code
+mise lint
+
+# Build binary locally
+mise build
+
+# Create a snapshot release
+mise release-snapshot
+```
+
+### Security Scanning
+
+The project includes automated security scanning using [Grype](https://github.com/anchore/grype):
+
+- **CI Integration**: All pull requests are automatically scanned for vulnerabilities
+- Scans are configured to check for medium severity and above
 
 ## License
 
