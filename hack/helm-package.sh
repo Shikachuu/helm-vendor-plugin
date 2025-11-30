@@ -21,8 +21,16 @@ echo "$HELM_KEY_PASSPHRASE" | helm plugin package \
     "tmp-$OS-$ARCH/"
 
 mkdir -p dist
-mv "dist-$OS-$ARCH/vendor-$PLUGIN_VERSION.tgz" "dist/vendor-$VERSION-$OS-$ARCH.tgz"
-mv "dist-$OS-$ARCH/vendor-$PLUGIN_VERSION.tgz.prov" "dist/vendor-$VERSION-$OS-$ARCH.tgz.prov"
+mv "dist-$OS-$ARCH/vendor-$PLUGIN_VERSION.tgz" "dist/$OS-$ARCH-$VERSION.tgz"
+mv "dist-$OS-$ARCH/vendor-$PLUGIN_VERSION.tgz.prov" "dist/$OS-$ARCH-$VERSION.tgz.prov"
+
+# Update the filename reference in the provenance file
+# Use different sed syntax for macOS vs Linux
+if [ "$(uname)" = "Darwin" ]; then
+    sed -i '' "s/vendor-$PLUGIN_VERSION\.tgz/$OS-$ARCH-$VERSION.tgz/g" "dist/$OS-$ARCH-$VERSION.tgz.prov"
+else
+    sed -i "s/vendor-$PLUGIN_VERSION\.tgz/$OS-$ARCH-$VERSION.tgz/g" "dist/$OS-$ARCH-$VERSION.tgz.prov"
+fi
 
 rm -rf "tmp-$OS-$ARCH" "dist-$OS-$ARCH"
 

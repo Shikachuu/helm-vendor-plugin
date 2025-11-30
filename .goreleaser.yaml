@@ -76,7 +76,7 @@ release:
 
     Install or update this plugin using:
     ```bash
-    helm plugin install https://github.com/Shikachuu/helm-vendor-plugin/releases/download/{{ .Tag }}/vendor-{{ .Version }}-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m).tgz
+    helm plugin install https://github.com/Shikachuu/helm-vendor-plugin/releases/download/{{ .Tag }}/$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)-{{ .Version }}.tgz
     # or use an oci compatbile registry
     helm plugin install oci://ghcr.io/shikachuu/helm-vendor-plugin/$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m):{{ .Version }}
     # or to update
