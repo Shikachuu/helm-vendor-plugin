@@ -35,7 +35,10 @@ run = "go build -trimpath -ldflags='-s -w' -o bin/vendor-plugin"
 
 [tasks.release-snapshot]
 description = "Build a snapshot release with goreleaser"
-run = "goreleaser release --snapshot --clean"
+run = [
+  "goreleaser release --snapshot --clean",
+  "bash hack/helm-package.sh",
+]
 
 [tasks.release-check]
 description = "Check goreleaser configuration"
