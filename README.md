@@ -5,7 +5,7 @@ A Helm plugin for downloading and vendoring Helm charts from remote repositories
 ## Installation
 
 ```bash
-helm plugin install "https://github.com/Shikachuu/helm-vendor-plugin/releases/latest/download/$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)-$(curl -sL https://api.github.com/repos/Shikachuu/helm-vendor-plugin/releases/latest | grep -o '"tag_name": "[^"]*' | cut -d'"' -f4).tgz"
+helm plugin install oci://ghcr.io/shikachuu/helm-vendor-plugin:latest
 ```
 
 ## Usage
