@@ -32,26 +32,30 @@ jobs:
         run: |
           base64 -d <<< "${{ secrets.GPG_KEYRING_BASE64 }}" > secring.gpg
 
-      - name: Run Go Releaser
+      - name: Run GoReleaser
         run: |
           goreleaser release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Package OCI artifact
+        run: |
+          bash hack/helm-package.sh
+        env:
           HELM_KEY_PASSPHRASE: ${{ secrets.HELM_KEY_PASSPHRASE }}
           SIGNING_KEY_EMAIL: ${{ secrets.SIGNING_KEY_EMAIL }}
 
       - name: Release OCI plugins with ORAS
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          for tgz_file in dist/*.tgz; do
-            if [ -f "$tgz_file" ]; then
-              filename=$(basename "$tgz_file" .tgz)
-              os_arch=$(echo "$filename" | rev | cut -d'-' -f1,2 | rev)
-              oras push "$NAME/$os_arch:$VERSION" \
-                --artifact-type application/vnd.helm.plugin.v1+json \
-                "$tgz_file" \
-                "$tgz_file.prov"
-            fi
-          done
+          oras push "$NAME:$VERSION" \
+            --artifact-type application/vnd.helm.plugin.v1+json \
+            "vendor-${VERSION}.tgz" \
+            "vendor-${VERSION}.tgz.prov"
+
+          oras push "$NAME:latest" \
+            --artifact-type application/vnd.helm.plugin.v1+json \
+            "vendor-${VERSION}.tgz" \
+            "vendor-${VERSION}.tgz.prov"
         env:
           NAME: "ghcr.io/shikachuu/helm-vendor-plugin"
