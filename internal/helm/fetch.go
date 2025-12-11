@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"path"
+	"strings"
 
 	"github.com/Shikachuu/helm-vendor-plugin/internal/config"
 	"golang.org/x/sync/errgroup"
@@ -35,7 +37,8 @@ func FetchCharts(s *Settings, vendorCharts []config.VendorChart) error {
 
 	for i := range vendorCharts {
 		eg.Go(func() error {
-			slog.Info("downloading chart", "repo", vendorCharts[i].Repository, "name", vendorCharts[i].Name, "destination", vendorCharts[i].Destination)
+			logger := slog.With("name", vendorCharts[i].Name)
+			logger.Info("downloading chart", "repo", vendorCharts[i].Repository, "destination", vendorCharts[i].Destination)
 
 			err := os.MkdirAll(vendorCharts[i].Destination, 0o750)
 			if err != nil {
@@ -57,12 +60,29 @@ func FetchCharts(s *Settings, vendorCharts []config.VendorChart) error {
 				return fmt.Errorf("failed to get chart full URL: %w", err)
 			}
 
-			p, v, err := dl.DownloadTo(url, vendorCharts[i].Version, vendorCharts[i].Destination)
+			p, v, err := dl.DownloadToCache(url, vendorCharts[i].Version)
 			if err != nil {
 				return fmt.Errorf("unable to download chart: %w", err)
 			}
 
-			slog.Info("chart downloaded", "url", url, "destination", p)
+			logger.Info("chart downloaded to cache", "url", url)
+
+			if vendorCharts[i].Extract {
+				logger.Info("extracting chart", "destination", vendorCharts[i].Destination)
+
+				err = extractChartTgz(p, vendorCharts[i].Destination)
+			} else {
+				cURL := strings.Split(url, "/")
+				destPath := path.Join(vendorCharts[i].Destination, cURL[len(cURL)-1])
+
+				logger.Info("copying chart archive", "destination", destPath)
+
+				err = copyChart(p, destPath)
+			}
+
+			if err != nil {
+				return fmt.Errorf("unable to perform chart filemsystem action: %w", err)
+			}
 
 			if v != nil && v.SignedBy != nil {
 				slog.Info("chart validated", "url", url, "hash", v.FileHash)
