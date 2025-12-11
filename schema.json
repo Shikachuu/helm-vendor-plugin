@@ -42,6 +42,11 @@
             "type": "boolean",
             "description": "Verify chart provenance",
             "default": false
+          },
+          "extract": {
+            "type": "boolean",
+            "description": "Extract the chart instead of storing the tgz file",
+            "default": false
           }
         },
         "additionalProperties": false

@@ -9,4 +9,5 @@ type VendorChart struct {
 	Destination string `json:"destination"`
 	Insecure    bool   `json:"insecure"`
 	Verify      bool   `json:"verify"`
+	Extract     bool   `json:"extract"`
 }
