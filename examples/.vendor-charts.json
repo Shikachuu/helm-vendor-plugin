@@ -1,0 +1,18 @@
+{
+  "$schema": "../schema.json",
+  "charts": [
+    {
+      "name": "traefik",
+      "repository": "oci://ghcr.io/traefik/helm",
+      "version": "37.4.0",
+      "destination": "artifacts/traefik"
+    },
+    {
+      "name": "harbor",
+      "repository": "https://helm.goharbor.io",
+      "version": "1.18.1",
+      "destination": "artifacts/harbor",
+      "extract": true
+    }
+  ]
+}

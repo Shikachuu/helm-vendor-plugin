@@ -3,6 +3,7 @@ module github.com/Shikachuu/helm-vendor-plugin
 go 1.25.4
 
 require (
+	github.com/cyphar/filepath-securejoin v0.5.0
 	github.com/kaptinlin/jsonschema v0.6.1
 	github.com/spf13/cobra v1.10.1
 	golang.org/x/sync v0.18.0
@@ -18,7 +19,6 @@ require (
 	github.com/blang/semver/v4 v4.0.0 // indirect
 	github.com/chai2010/gettext-go v1.0.2 // indirect
 	github.com/cloudflare/circl v1.6.1 // indirect
-	github.com/cyphar/filepath-securejoin v0.5.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dylibso/observe-sdk/go v0.0.0-20240819160327-2d926c5d788a // indirect
 	github.com/emicklei/go-restful/v3 v3.12.2 // indirect
