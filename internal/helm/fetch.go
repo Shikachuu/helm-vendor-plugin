@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"os"
 	"path"
-	"strings"
 
 	"github.com/Shikachuu/helm-vendor-plugin/internal/config"
 	"golang.org/x/sync/errgroup"
@@ -72,8 +71,10 @@ func FetchCharts(s *Settings, vendorCharts []config.VendorChart) error {
 
 				err = extractChartTgz(p, vendorCharts[i].Destination)
 			} else {
-				cURL := strings.Split(url, "/")
-				destPath := path.Join(vendorCharts[i].Destination, cURL[len(cURL)-1])
+				destPath := path.Join(
+					vendorCharts[i].Destination,
+					vendorCharts[i].Name+"-"+vendorCharts[i].Version+".tgz",
+				)
 
 				logger.Info("copying chart archive", "destination", destPath)
 

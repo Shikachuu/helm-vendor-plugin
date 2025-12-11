@@ -15,7 +15,7 @@ import (
 
 var errUnknownHeaderType = errors.New("unknown filesystem header")
 
-// copyChart copies the chart archive to the destination directory
+// copyChart copies the chart archive to the destination directory.
 func copyChart(srcPath, dstPath string) error {
 	src, err := os.Open(filepath.Clean(srcPath))
 	if err != nil {
@@ -43,7 +43,7 @@ func copyChart(srcPath, dstPath string) error {
 	return nil
 }
 
-// extractChartTgz decompress the source gzip archive, then copy the files from the tar archive to the destination
+// extractChartTgz decompress the source gzip archive, then copy the files from the tar archive to the destination.
 func extractChartTgz(src, dst string) error {
 	f, err := os.Open(filepath.Clean(src))
 	if err != nil {
