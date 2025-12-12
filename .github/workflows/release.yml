@@ -48,14 +48,17 @@ jobs:
       - name: Release OCI plugins with ORAS
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
+          # oras will include the full path to the artifact files, we must cd into the directory
+          cd dist
+          # upload the plugins to github's oci registry, the file names AND the repo name MUST match the plugin name in the plugin.yaml file!
           oras push "$NAME:$VERSION" \
             --artifact-type application/vnd.helm.plugin.v1+json \
-            "dist/vendor-${VERSION}.tgz" \
-            "dist/vendor-${VERSION}.tgz.prov"
+            "helm-vendor-plugin-${VERSION}.tgz" \
+            "helm-vendor-plugin-${VERSION}.tgz.prov"
 
           oras push "$NAME:latest" \
             --artifact-type application/vnd.helm.plugin.v1+json \
-            "dist/vendor-${VERSION}.tgz" \
-            "dist/vendor-${VERSION}.tgz.prov"
+            "helm-vendor-plugin-${VERSION}.tgz" \
+            "helm-vendor-plugin-${VERSION}.tgz.prov"
         env:
           NAME: "ghcr.io/shikachuu/helm-vendor-plugin"

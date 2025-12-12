@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/Shikachuu/helm-vendor-plugin/refs/heads/main/schema.json
+# yaml-language-server: $schema=../schema.json
 charts:
   - name: descheduler
     repository: https://kubernetes-sigs.github.io/descheduler
@@ -10,9 +10,10 @@ charts:
     repository: oci://ghcr.io/prometheus-community/charts
     version: 27.45.0
     destination: artifacts/prometheus
+    extract: true
 
   - name: cert-manager
     repository: https://charts.jetstack.io
     version: v1.19.1
-    verify: true
     destination: artifacts/cert-manager
+    verify: true
