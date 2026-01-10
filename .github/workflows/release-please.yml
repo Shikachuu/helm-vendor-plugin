@@ -1,0 +1,31 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: release-please
+      cancel-in-progress: false
+    steps:
+      - name: Run Release Please
+        uses: google-github-actions/release-please-action@cc61a07845567d7bb86f8fb516ea5b3b8b9e98ab # v4.1.2
+        id: release
+        with:
+          release-type: simple
+          config-file: .github/release-please-config.json
+          manifest-file: .github/.release-please-manifest.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release outputs
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          echo "::notice::Release ${{ steps.release.outputs.tag_name }} was created!"
