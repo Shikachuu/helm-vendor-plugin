@@ -3,11 +3,11 @@ module github.com/Shikachuu/helm-vendor-plugin
 go 1.25.4
 
 require (
-	github.com/cyphar/filepath-securejoin v0.5.0
-	github.com/kaptinlin/jsonschema v0.6.1
-	github.com/spf13/cobra v1.10.1
-	golang.org/x/sync v0.18.0
-	helm.sh/helm/v4 v4.0.0
+	github.com/cyphar/filepath-securejoin v0.6.1
+	github.com/kaptinlin/jsonschema v0.6.5
+	github.com/spf13/cobra v1.10.2
+	golang.org/x/sync v0.19.0
+	helm.sh/helm/v4 v4.0.4
 	sigs.k8s.io/yaml v1.6.0
 )
 
@@ -34,7 +34,7 @@ require (
 	github.com/go-openapi/jsonreference v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.1 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
-	github.com/goccy/go-yaml v1.18.0 // indirect
+	github.com/goccy/go-yaml v1.19.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/gnostic-models v0.7.0 // indirect
@@ -46,9 +46,9 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/kaptinlin/go-i18n v0.2.0 // indirect
-	github.com/kaptinlin/jsonpointer v0.4.6 // indirect
-	github.com/kaptinlin/messageformat-go v0.4.6 // indirect
+	github.com/kaptinlin/go-i18n v0.2.2 // indirect
+	github.com/kaptinlin/jsonpointer v0.4.8 // indirect
+	github.com/kaptinlin/messageformat-go v0.4.7 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
 	github.com/mailru/easyjson v0.9.0 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
@@ -79,9 +79,9 @@ require (
 	golang.org/x/crypto v0.45.0 // indirect
 	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/oauth2 v0.30.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/term v0.37.0 // indirect
-	golang.org/x/text v0.31.0 // indirect
+	golang.org/x/text v0.32.0 // indirect
 	golang.org/x/time v0.12.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.12.0 // indirect
