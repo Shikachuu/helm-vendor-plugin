@@ -17,7 +17,7 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Run Release Please
-        uses: google-github-actions/release-please-action@cc61a07845567d7bb86f8fb516ea5b3b8b9e98ab # v4.1.2
+        uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.4.0
         id: release
         with:
           release-type: simple
