@@ -23,7 +23,7 @@ func readTestFile(t *testing.T, f string) []byte {
 	return s
 }
 
-// More like and integration test, this depends on the `jsonSchema` global
+// More like and integration test, this depends on the `jsonSchema` global.
 func TestNewJSONConfigParser(t *testing.T) {
 	tests := []struct {
 		name           string
@@ -43,6 +43,7 @@ func TestNewJSONConfigParser(t *testing.T) {
 	}
 	for _, tt := range tests {
 		jsonSchema = []byte{}
+
 		t.Run(tt.name, func(t *testing.T) {
 			if tt.schemaFileName != "" {
 				jsonSchema = readTestFile(t, tt.schemaFileName)
@@ -55,12 +56,13 @@ func TestNewJSONConfigParser(t *testing.T) {
 			}
 
 			require.NoError(t, gotErr)
-
 		})
 	}
 }
 
 func TestJSONConfigParser_Unmarshall(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name    string
 		cfg     []byte
