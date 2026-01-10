@@ -1,0 +1,42 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "simple",
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": false,
+      "versioning": "default",
+      "changelog-sections": [
+        { "type": "feat", "section": "✨ Features", "hidden": false },
+        { "type": "fix", "section": "🐛 Bug Fixes", "hidden": false },
+        { "type": "perf", "section": "⚡ Performance Improvements", "hidden": false },
+        { "type": "revert", "section": "⏪ Reverts", "hidden": false },
+        { "type": "docs", "section": "📚 Documentation", "hidden": false },
+        { "type": "refactor", "section": "♻️ Code Refactoring", "hidden": false },
+        { "type": "chore", "section": "🔧 Miscellaneous", "hidden": false },
+        { "type": "test", "section": "✅ Tests", "hidden": false },
+        { "type": "build", "section": "📦 Build System", "hidden": false },
+        { "type": "ci", "section": "👷 Continuous Integration", "hidden": true }
+      ],
+      "extra-files": [
+        {
+          "type": "yaml",
+          "path": "plugin.yaml",
+          "jsonpath": "$.version"
+        }
+      ],
+      "include-component-in-tag": false,
+      "include-v-in-tag": true,
+      "tag-separator": "",
+      "separate-pull-requests": false,
+      "draft": false,
+      "prerelease": false,
+      "changelog-type": "default",
+      "changelog-path": "CHANGELOG.md",
+      "skip-github-release": true,
+      "pull-request-title-pattern": "chore: release ${version}",
+      "pull-request-header": ":robot: Automated release PR"
+    }
+  }
+}
