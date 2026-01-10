@@ -42,6 +42,14 @@ archives:
 
 sboms:
   - artifacts: binary
+    cmd: trivy
+    args:
+      - "rootfs"
+      - "--format"
+      - "spdx-json"
+      - "--output"
+      - "$document"
+      - "$artifact"
 
 checksum:
   name_template: "checksums.txt"
