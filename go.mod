@@ -4,11 +4,11 @@ go 1.25.4
 
 require (
 	github.com/cyphar/filepath-securejoin v0.6.1
-	github.com/kaptinlin/jsonschema v0.6.5
+	github.com/kaptinlin/jsonschema v0.6.6
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/sync v0.19.0
-	helm.sh/helm/v4 v4.0.4
+	helm.sh/helm/v4 v4.0.5
 	sigs.k8s.io/yaml v1.6.0
 )
 
