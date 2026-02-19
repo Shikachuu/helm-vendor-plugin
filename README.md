@@ -68,6 +68,7 @@ charts:
     repository: oci://ghcr.io/prometheus-community/charts
     version: 27.45.0
     destination: artifacts/prometheus
+    extract: true
 
   - name: cert-manager
     repository: https://charts.jetstack.io
@@ -93,7 +94,8 @@ charts:
       "name": "prometheus",
       "repository": "oci://ghcr.io/prometheus-community/charts",
       "version": "27.45.0",
-      "destination": "artifacts/prometheus"
+      "destination": "artifacts/prometheus",
+      "extract": true
     }
   ]
 }
@@ -109,6 +111,7 @@ charts:
 | `destination` | Yes      | string  | Local destination path for the vendored chart                             |
 | `insecure`    | No       | boolean | Allow insecure (non-TLS) connections to the repository (default: `false`) |
 | `verify`      | No       | boolean | Verify chart provenance (default: `false`)                                |
+| `extract`     | No       | boolean | Extract the chart instead of storing the `.tgz` file (default: `false`)   |
 
 ### JSON Schema
 
@@ -139,7 +142,7 @@ This project uses [mise](https://mise.jdx.dev/) for managing development tools. 
 # Run all tests
 mise test
 
-# Lint code
+# Lint code (also validates schema.json matches internal/config/schema.json)
 mise lint
 
 # Build binary locally
@@ -147,14 +150,23 @@ mise build
 
 # Create a snapshot release
 mise release-snapshot
+
+# Check goreleaser configuration
+mise release-check
+
+# Run go generate for all files
+mise gogen
+
+# Run security checks (vulnerability and secret scanning)
+mise secu-scan
 ```
 
 ### Security Scanning
 
-The project includes automated security scanning using [Grype](https://github.com/anchore/grype):
+The project includes automated security scanning:
 
-- **CI Integration**: All pull requests are automatically scanned for vulnerabilities
-- Scans are configured to check for medium severity and above
+- **[Trivy](https://github.com/aquasecurity/trivy)**: Filesystem scanning for vulnerabilities and secrets, runs on all pull requests. Results are uploaded to the GitHub Security tab as SARIF reports. Also available locally via `mise secu-scan`.
+- **[CodeQL](https://codeql.github.com/)**: Static code analysis for Go and GitHub Actions, runs on pull requests and on a scheduled basis.
 
 ## License
 
