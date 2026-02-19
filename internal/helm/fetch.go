@@ -114,7 +114,7 @@ func getChartURL(getters getter.Providers, vc *config.VendorChart) (string, erro
 		vc.Repository,
 		vc.Name,
 		getters,
-		repo.WithInsecureSkipTLSverify(vc.Insecure),
+		repo.WithInsecureSkipTLSVerify(vc.Insecure),
 		repo.WithChartVersion(vc.Version),
 	)
 	if err != nil {
