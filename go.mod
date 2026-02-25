@@ -1,10 +1,10 @@
 module github.com/Shikachuu/helm-vendor-plugin
 
-go 1.25.4
+go 1.26
 
 require (
 	github.com/cyphar/filepath-securejoin v0.6.1
-	github.com/kaptinlin/jsonschema v0.6.10
+	github.com/kaptinlin/jsonschema v0.7.3
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/sync v0.19.0
@@ -45,9 +45,9 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/kaptinlin/go-i18n v0.2.3 // indirect
-	github.com/kaptinlin/jsonpointer v0.4.9 // indirect
-	github.com/kaptinlin/messageformat-go v0.4.9 // indirect
+	github.com/kaptinlin/go-i18n v0.2.11 // indirect
+	github.com/kaptinlin/jsonpointer v0.4.16 // indirect
+	github.com/kaptinlin/messageformat-go v0.4.18 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
 	github.com/mailru/easyjson v0.9.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
@@ -75,7 +75,7 @@ require (
 	golang.org/x/oauth2 v0.30.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/term v0.39.0 // indirect
-	golang.org/x/text v0.33.0 // indirect
+	golang.org/x/text v0.34.0 // indirect
 	golang.org/x/time v0.12.0 // indirect
 	google.golang.org/protobuf v1.36.8 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.13.0 // indirect
