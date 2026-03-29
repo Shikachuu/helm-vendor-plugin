@@ -96,7 +96,7 @@ release:
     name: helm-vendor-plugin
   draft: false
   prerelease: auto
-  mode: append
+  mode: replace
   header: |
     ## Helm Vendor Plugin {{ .Tag }} ({{ .Date }})
 

@@ -32,7 +32,7 @@
       "prerelease": false,
       "changelog-type": "default",
       "changelog-path": "CHANGELOG.md",
-      "skip-github-release": true,
+      "skip-github-release": false,
       "pull-request-title-pattern": "chore: release ${version}",
       "pull-request-header": ":robot: Automated release PR"
     }
