@@ -4,6 +4,17 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag name to release (e.g. v1.3.0)"
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      tag_name:
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -16,6 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
+          ref: ${{ inputs.tag_name || github.ref }}
           fetch-depth: 0
 
       - name: Log in to GitHub Container Registry
@@ -37,6 +49,7 @@ jobs:
           goreleaser release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GORELEASER_CURRENT_TAG: ${{ inputs.tag_name || github.ref_name }}
 
       - name: Package OCI artifact
         run: |
@@ -47,7 +60,8 @@ jobs:
 
       - name: Release OCI plugins with ORAS
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          TAG="${{ inputs.tag_name || github.ref_name }}"
+          VERSION="${TAG#v}"
           # oras will include the full path to the artifact files, we must cd into the directory
           cd dist
           # upload the plugins to github's oci registry, the file names AND the repo name MUST match the plugin name in the plugin.yaml file!
