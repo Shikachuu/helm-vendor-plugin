@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.2](https://github.com/Shikachuu/helm-vendor-plugin/compare/v1.2.1...v1.2.2) (2026-03-29)
+
+
+### 🐛 Bug Fixes
+
+* replace release workflow in gorelease and release-please ([93cd391](https://github.com/Shikachuu/helm-vendor-plugin/commit/93cd391dcf316843c98c1a125e679f1e26b3e459))
+
+
+### 🔧 Miscellaneous
+
+* **deps:** Bump docker/login-action from 3.7.0 to 4.0.0 ([#36](https://github.com/Shikachuu/helm-vendor-plugin/issues/36)) ([fb4d7dc](https://github.com/Shikachuu/helm-vendor-plugin/commit/fb4d7dc06f3d556809aaba75cc17ed35a91b1494))
+* **deps:** Bump github.com/cloudflare/circl from 1.6.1 to 1.6.3 ([#32](https://github.com/Shikachuu/helm-vendor-plugin/issues/32)) ([8391fca](https://github.com/Shikachuu/helm-vendor-plugin/commit/8391fca81244012328e84356c609b11b4fc7cfff))
+* **deps:** Bump github/codeql-action from 4.32.3 to 4.32.6 ([#35](https://github.com/Shikachuu/helm-vendor-plugin/issues/35)) ([7c4c337](https://github.com/Shikachuu/helm-vendor-plugin/commit/7c4c337f3602ff0a4c4ac9f90e71da80fa6a426a))
+* **deps:** Bump github/codeql-action from 4.32.6 to 4.34.1 ([#42](https://github.com/Shikachuu/helm-vendor-plugin/issues/42)) ([9d182dd](https://github.com/Shikachuu/helm-vendor-plugin/commit/9d182dd23069386eeeda10804512ebaf75940259))
+* update mise and it's lock file + go dependencies ([#44](https://github.com/Shikachuu/helm-vendor-plugin/issues/44)) ([caf08cc](https://github.com/Shikachuu/helm-vendor-plugin/commit/caf08cc6c2d48b2770c0f3f94a426add51a0c083))
+
 ## [1.2.1](https://github.com/Shikachuu/helm-vendor-plugin/compare/v1.2.0...v1.2.1) (2026-02-19)
 
 
