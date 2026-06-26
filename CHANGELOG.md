@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.2.3](https://github.com/Shikachuu/helm-vendor-plugin/compare/v1.2.2...v1.2.3) (2026-06-26)
+
+
+### 🐛 Bug Fixes
+
+* add manual dispatch and workflow call to release-please ([c72a5ee](https://github.com/Shikachuu/helm-vendor-plugin/commit/c72a5ee53a8e243d0c17e66ff89819d4971eaa97))
+
+
+### 🔧 Miscellaneous
+
+* **deps:** Bump actions/checkout from 6.0.2 to 6.0.3 ([#63](https://github.com/Shikachuu/helm-vendor-plugin/issues/63)) ([726ab23](https://github.com/Shikachuu/helm-vendor-plugin/commit/726ab231a75ec8e0e02ec1babf60c9ac00c1ec4e))
+* **deps:** Bump docker/login-action from 4.0.0 to 4.1.0 ([#48](https://github.com/Shikachuu/helm-vendor-plugin/issues/48)) ([67fb311](https://github.com/Shikachuu/helm-vendor-plugin/commit/67fb311971aa426614fd430afcb9ca2d71cba104))
+* **deps:** Bump docker/login-action from 4.1.0 to 4.2.0 ([#60](https://github.com/Shikachuu/helm-vendor-plugin/issues/60)) ([6cdef31](https://github.com/Shikachuu/helm-vendor-plugin/commit/6cdef312ce0b0141ccedb5303b4222321aa7b0f3))
+* **deps:** Bump github/codeql-action from 4.34.1 to 4.35.1 ([#46](https://github.com/Shikachuu/helm-vendor-plugin/issues/46)) ([f7b11e1](https://github.com/Shikachuu/helm-vendor-plugin/commit/f7b11e1871dd06cca5f6b11014bfc25041e780a5))
+* **deps:** Bump github/codeql-action from 4.35.1 to 4.36.2 ([#65](https://github.com/Shikachuu/helm-vendor-plugin/issues/65)) ([7646582](https://github.com/Shikachuu/helm-vendor-plugin/commit/76465829d2652cfc4fe8c4f234ce5a89977c47f2))
+* **deps:** Bump googleapis/release-please-action from 4.4.0 to 4.4.1 ([#51](https://github.com/Shikachuu/helm-vendor-plugin/issues/51)) ([79a55f6](https://github.com/Shikachuu/helm-vendor-plugin/commit/79a55f656ba25b631fa31b02faffd556f1e06496))
+* **deps:** Bump googleapis/release-please-action from 4.4.1 to 5.0.0 ([#55](https://github.com/Shikachuu/helm-vendor-plugin/issues/55)) ([187831b](https://github.com/Shikachuu/helm-vendor-plugin/commit/187831b14d0756c4d0b8fb4ec9bfecf85d63f45c))
+* **deps:** Bump helm.sh/helm/v4 from 4.1.3 to 4.1.4 ([#49](https://github.com/Shikachuu/helm-vendor-plugin/issues/49)) ([a5322d7](https://github.com/Shikachuu/helm-vendor-plugin/commit/a5322d7774f0abe46a7693e87821197b80d032f7))
+* **deps:** Bump jdx/mise-action from 4.0.1 to 4.1.0 ([#64](https://github.com/Shikachuu/helm-vendor-plugin/issues/64)) ([c652a69](https://github.com/Shikachuu/helm-vendor-plugin/commit/c652a69cfaf929ca39227cfc5f6911dd486eacd1))
+* **deps:** Bump the go-dependency-updates group across 1 directory with 2 updates ([#52](https://github.com/Shikachuu/helm-vendor-plugin/issues/52)) ([7757725](https://github.com/Shikachuu/helm-vendor-plugin/commit/77577253dc5dbbf4d996f48292295a971b379395))
+* **deps:** Bump the go-dependency-updates group across 1 directory with 4 updates ([#67](https://github.com/Shikachuu/helm-vendor-plugin/issues/67)) ([ed54466](https://github.com/Shikachuu/helm-vendor-plugin/commit/ed54466922ef5578005fc91be92298480208fdf2))
+
 ## [1.2.2](https://github.com/Shikachuu/helm-vendor-plugin/compare/v1.2.1...v1.2.2) (2026-03-29)
 
 
